@@ -1,10 +1,15 @@
 FROM node:18-alpine
 
 # Install Python and pip for yt-dlp
-RUN apk add --no-cache python3 py3-pip
+RUN apk add --no-cache python3 py3-pip python3-dev
 
-# Install yt-dlp using --break-system-packages (safe in container)
-RUN pip3 install --break-system-packages yt-dlp
+# Create virtual environment and install yt-dlp
+RUN python3 -m venv /opt/venv
+ENV PATH="/opt/venv/bin:$PATH"
+RUN pip install yt-dlp
+
+# Make sure yt-dlp is accessible globally
+RUN ln -s /opt/venv/bin/yt-dlp /usr/local/bin/yt-dlp
 
 WORKDIR /app
 
