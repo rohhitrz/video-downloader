@@ -8,6 +8,8 @@ export const metadata: Metadata = {
   description: "Secure tool for downloading direct video and image files",
 };
 
+
+
 export default function RootLayout({
   children,
 }: {

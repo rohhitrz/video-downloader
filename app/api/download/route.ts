@@ -62,7 +62,9 @@ export async function POST(request: NextRequest) {
     // Check content type
     const contentType = response.headers.get("content-type") || "";
     if (!isValidContentType(contentType)) {
-      return NextResponse.json({ error: "Not video/image" }, { status: 400 });
+      return NextResponse.json({ 
+        error: `Not a video/image file. Got content-type: ${contentType}. This URL might be a webpage instead of a direct file link.` 
+      }, { status: 400 });
     }
 
     // Check content length if available

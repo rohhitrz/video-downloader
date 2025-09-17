@@ -71,11 +71,22 @@ export default function Home() {
   return (
     <main className="container">
       <div className="alert alert-warning">
-        <h3>⚠️ Important Disclaimers:</h3>
+        <h3>⚠️ Important Legal Notice:</h3>
         <ul>
-          <li>Direct videos/images only (.mp4, .webm, .jpg, .png, etc.)</li>
-          <li>Private/personal use only. Do not download content you don't own.</li>
-          <li>Not for YouTube, Instagram, TikTok, or other streaming platforms.</li>
+          <li><strong>Personal use only</strong> - Only download content you own or have permission to use</li>
+          <li><strong>Respect copyright</strong> - Don't download copyrighted content without permission</li>
+          <li><strong>Direct file URLs only</strong> - This works with direct links to video/image files</li>
+          <li><strong>Not a social media downloader</strong> - For YouTube/Instagram, you need direct video URLs</li>
+        </ul>
+      </div>
+
+      <div className="alert alert-info">
+        <h3>💡 How to find direct video URLs:</h3>
+        <ul>
+          <li><strong>Right-click on videos</strong> and select "Copy video address" (if available)</li>
+          <li><strong>Look for .mp4, .webm, .mov files</strong> in browser developer tools</li>
+          <li><strong>Use browser extensions</strong> that can extract direct video URLs</li>
+          <li><strong>Check CDN links</strong> - many sites serve videos from CDNs with direct URLs</li>
         </ul>
       </div>
 
@@ -132,80 +143,27 @@ export default function Home() {
           </div>
         )}
       </div>
-        <div className="alert alert-warning">
-          <h3>⚠️ Important Disclaimers:</h3>
-          <ul>
-            <li>Direct videos/images only (.mp4, .webm, .jpg, .png, etc.)</li>
-            <li>Private/personal use only. Do not download content you don't own.</li>
-            <li>Not for YouTube, Instagram, TikTok, or other streaming platforms.</li>
-          </ul>
-        </div>
-
-        <div className="card">
-          <form onSubmit={handleSubmit}>
-            <div className="form-group">
-              <label htmlFor="url" className="label">
-                File URL:
-              </label>
-              <input
-                id="url"
-                type="url"
-                value={url}
-                onChange={(e) => setUrl(e.target.value)}
-                placeholder="https://example.com/video.mp4"
-                className="input"
-                required
-              />
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="apiKey" className="label">
-                API Key:
-              </label>
-              <input
-                id="apiKey"
-                type="password"
-                value={apiKey}
-                onChange={(e) => setApiKey(e.target.value)}
-                placeholder="Enter your API key"
-                className="input"
-                required
-              />
-            </div>
-
-            <button
-              type="submit"
-              disabled={status === 'loading'}
-              className="button"
-            >
-              {status === 'loading' ? 'Downloading...' : 'Download'}
-            </button>
-          </form>
-
-          {message && (
-            <div
-              className={`alert ${
-                status === 'success' ? 'alert-success' : 
-                status === 'error' ? 'alert-error' : 
-                'alert-info'
-              }`}
-            >
-              {message}
-            </div>
-          )}
-        </div>
 
       <div className="info-section">
         <h3>Supported File Types:</h3>
         <p><strong>Videos:</strong> .mp4, .webm, .avi, .mov, .mkv</p>
         <p><strong>Images:</strong> .jpg, .jpeg, .png, .gif, .webp, .svg</p>
         
+        <h3>Example Working URLs:</h3>
+        <ul>
+          <li><code>https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_1mb.mp4</code></li>
+          <li><code>https://cdn.example.com/video.webm</code></li>
+          <li><code>https://files.example.com/image.jpg</code></li>
+        </ul>
+        
+        <h3>Why Social Media URLs Don't Work:</h3>
+        <p>YouTube, Instagram, etc. don't provide direct file URLs. They serve videos through their players with complex authentication. You need to extract the actual video file URLs first.</p>
+        
         <h3>Security Features:</h3>
         <ul>
           <li>API key authentication required</li>
           <li>File size limit (200MB default)</li>
           <li>Content type validation</li>
-          <li>Blocked streaming platforms</li>
           <li>Request timeout protection</li>
         </ul>
       </div>
