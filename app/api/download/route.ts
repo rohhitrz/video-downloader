@@ -3,8 +3,8 @@ import {
   isValidHttpUrl,
   isAllowedHost,
   isValidContentType,
-} from "@/lib/validators";
-import { extractSafeFilename } from "@/lib/filenames";
+} from "../../../lib/validators";
+import { extractSafeFilename } from "../../../lib/filenames";
 
 const MAX_BYTES = parseInt(process.env.MAX_BYTES || "209715200"); // 200MB
 const FETCH_TIMEOUT_MS = parseInt(process.env.FETCH_TIMEOUT_MS || "30000"); // 30s
