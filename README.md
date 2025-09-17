@@ -6,14 +6,15 @@ A secure, responsive Next.js application for downloading direct video and image 
 
 - ✅ **Responsive Design** - Works perfectly on desktop, tablet, and mobile
 - ✅ **Dark/Light Theme** - Toggle between themes with system preference detection
-
-- ✅ **Download direct video/image files** (.mp4, .webm, .jpg, .png, etc.)
+- ✅ **Dual Download Modes**:
+  - **Direct File Download** - For direct .mp4, .jpg, etc. links
+  - **Video Extraction** - For YouTube, Instagram, TikTok, etc. (requires yt-dlp)
 - ✅ **API Key Authentication** - Secure API key required
 - ✅ **File size limits** (200MB default)
 - ✅ **Content type validation**
-- ✅ **Blocked streaming platforms** (YouTube, Instagram, TikTok, etc.)
 - ✅ **Request timeout protection**
 - ✅ **Safe filename extraction**
+- ✅ **Legal safeguards** - Built-in warnings and responsible use guidelines
 
 ## Setup
 
@@ -33,12 +34,25 @@ A secure, responsive Next.js application for downloading direct video and image 
    API_KEY=your-secure-api-key-here
    ```
 
-4. **Run the development server:**
+4. **For video extraction (optional):**
+   Install yt-dlp for social media video extraction:
+   ```bash
+   # Using pip (recommended)
+   pip install yt-dlp
+   
+   # Or using homebrew on macOS
+   brew install yt-dlp
+   
+   # Or using pipx
+   pipx install yt-dlp
+   ```
+
+5. **Run the development server:**
    ```bash
    npm run dev
    ```
 
-5. **Open [http://localhost:3000](http://localhost:3000)**
+6. **Open [http://localhost:3000](http://localhost:3000)**
 
 ## Environment Variables
 
@@ -76,6 +90,44 @@ The app is fully responsive and works great on:
 - 🔄 **Auto-detection** - Respects system preferences
 - 💾 **Persistent** - Remembers your choice
 
+## Usage
+
+### Direct File Downloads
+Use the "Direct File Download" mode for:
+- Direct video files: `https://example.com/video.mp4`
+- Direct image files: `https://example.com/image.jpg`
+- Any direct media file URL
+
+### Video Extraction (yt-dlp)
+Use the "Video Extraction" mode for:
+- YouTube videos: `https://www.youtube.com/watch?v=...`
+- Instagram posts/reels: `https://www.instagram.com/p/...`
+- TikTok videos: `https://www.tiktok.com/@user/video/...`
+- Twitter videos: `https://twitter.com/user/status/...`
+- And many other platforms supported by yt-dlp
+
+**Note:** Video extraction requires yt-dlp to be installed on your system.
+
+## Supported Platforms (Video Extraction)
+
+yt-dlp supports 1000+ sites including:
+- YouTube, YouTube Music
+- Instagram (posts, reels, stories)
+- TikTok
+- Twitter/X
+- Facebook
+- Vimeo
+- Twitch
+- And many more...
+
 ## Legal Notice
 
-This tool is for personal use only. Only download content you own or have permission to download. Respect copyright laws and terms of service.# video-downloader
+⚠️ **Important:** This tool is for personal, educational, and backup purposes only.
+
+- Only download content you own or have explicit permission to download
+- Respect copyright laws and intellectual property rights
+- Follow the terms of service of the platforms you're downloading from
+- Use responsibly and ethically
+- Consider supporting content creators through official channels
+
+The developers are not responsible for any misuse of this tool.

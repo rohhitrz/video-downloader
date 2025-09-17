@@ -7,6 +7,7 @@ export default function Home() {
   const [apiKey, setApiKey] = useState('');
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [message, setMessage] = useState('');
+  const [downloadMode, setDownloadMode] = useState<'direct' | 'extract'>('direct');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -18,10 +19,11 @@ export default function Home() {
     }
 
     setStatus('loading');
-    setMessage('Downloading...');
+    setMessage(downloadMode === 'extract' ? 'Extracting and downloading...' : 'Downloading...');
 
     try {
-      const response = await fetch('/api/download', {
+      const endpoint = downloadMode === 'extract' ? '/api/extract' : '/api/download';
+      const response = await fetch(endpoint, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -75,19 +77,35 @@ export default function Home() {
         <ul>
           <li><strong>Personal use only</strong> - Only download content you own or have permission to use</li>
           <li><strong>Respect copyright</strong> - Don't download copyrighted content without permission</li>
-          <li><strong>Direct file URLs only</strong> - This works with direct links to video/image files</li>
-          <li><strong>Not a social media downloader</strong> - For YouTube/Instagram, you need direct video URLs</li>
+          <li><strong>Follow platform terms</strong> - Respect YouTube, Instagram, and other platform policies</li>
+          <li><strong>Educational/backup purposes</strong> - Use responsibly for legitimate purposes</li>
         </ul>
       </div>
 
-      <div className="alert alert-info">
-        <h3>💡 How to find direct video URLs:</h3>
-        <ul>
-          <li><strong>Right-click on videos</strong> and select "Copy video address" (if available)</li>
-          <li><strong>Look for .mp4, .webm, .mov files</strong> in browser developer tools</li>
-          <li><strong>Use browser extensions</strong> that can extract direct video URLs</li>
-          <li><strong>Check CDN links</strong> - many sites serve videos from CDNs with direct URLs</li>
-        </ul>
+      <div className="card">
+        <h3>Download Mode</h3>
+        <div style={{ marginBottom: '1rem' }}>
+          <label style={{ display: 'flex', alignItems: 'center', marginBottom: '0.5rem' }}>
+            <input
+              type="radio"
+              value="direct"
+              checked={downloadMode === 'direct'}
+              onChange={(e) => setDownloadMode(e.target.value as 'direct')}
+              style={{ marginRight: '0.5rem' }}
+            />
+            <strong>Direct File Download</strong> - For direct .mp4, .jpg, etc. links
+          </label>
+          <label style={{ display: 'flex', alignItems: 'center' }}>
+            <input
+              type="radio"
+              value="extract"
+              checked={downloadMode === 'extract'}
+              onChange={(e) => setDownloadMode(e.target.value as 'extract')}
+              style={{ marginRight: '0.5rem' }}
+            />
+            <strong>Video Extraction</strong> - For YouTube, Instagram, TikTok, etc. (requires yt-dlp)
+          </label>
+        </div>
       </div>
 
       <div className="card">
@@ -101,7 +119,9 @@ export default function Home() {
               type="url"
               value={url}
               onChange={(e) => setUrl(e.target.value)}
-              placeholder="https://example.com/video.mp4"
+              placeholder={downloadMode === 'extract' 
+                ? "https://www.youtube.com/watch?v=... or https://www.instagram.com/reel/..."
+                : "https://example.com/video.mp4"}
               className="input"
               required
             />
