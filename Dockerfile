@@ -3,8 +3,8 @@ FROM node:18-alpine
 # Install Python and pip for yt-dlp
 RUN apk add --no-cache python3 py3-pip
 
-# Install yt-dlp
-RUN pip3 install yt-dlp
+# Install yt-dlp using --break-system-packages (safe in container)
+RUN pip3 install --break-system-packages yt-dlp
 
 WORKDIR /app
 
