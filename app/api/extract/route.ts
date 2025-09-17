@@ -33,9 +33,11 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Invalid URL format" }, { status: 400 });
     }
 
-    // Check if yt-dlp is available
+    // Check if yt-dlp is available and get its path
+    let ytDlpPath;
     try {
-      await execAsync("which yt-dlp");
+      const { stdout } = await execAsync("which yt-dlp");
+      ytDlpPath = stdout.trim();
     } catch {
       return NextResponse.json(
         { 
@@ -46,15 +48,36 @@ export async function POST(request: NextRequest) {
     }
 
     // Get video info first (without downloading)
-    const infoCommand = `yt-dlp --dump-json --no-download "${url}"`;
+    const infoCommand = `"${ytDlpPath}" --dump-json --no-download "${url}"`;
     
     let videoInfo;
     try {
-      const { stdout } = await execAsync(infoCommand, { 
+      const { stdout, stderr } = await execAsync(infoCommand, { 
         timeout: FETCH_TIMEOUT_MS 
       });
-      videoInfo = JSON.parse(stdout);
+      
+      console.log('yt-dlp stdout:', stdout);
+      console.log('yt-dlp stderr:', stderr);
+      
+      // Clean the stdout and find the JSON part
+      const lines = stdout.trim().split('\n');
+      let jsonLine = '';
+      
+      // Find the line that looks like JSON (starts with {)
+      for (const line of lines) {
+        if (line.trim().startsWith('{')) {
+          jsonLine = line.trim();
+          break;
+        }
+      }
+      
+      if (!jsonLine) {
+        throw new Error('No JSON output found from yt-dlp');
+      }
+      
+      videoInfo = JSON.parse(jsonLine);
     } catch (error: any) {
+      console.error('yt-dlp error details:', error);
       return NextResponse.json(
         { 
           error: `Failed to extract video info: ${error.message}. This might not be a supported video URL.` 
@@ -77,7 +100,7 @@ export async function POST(request: NextRequest) {
     const timestamp = Date.now();
     const tempFile = `/tmp/download_${timestamp}.%(ext)s`;
     
-    const downloadCommand = `yt-dlp -f "best[filesize<${MAX_BYTES}]" --no-playlist -o "${tempFile}" "${url}"`;
+    const downloadCommand = `"${ytDlpPath}" -f "best[filesize<${MAX_BYTES}]" --no-playlist -o "${tempFile}" "${url}"`;
     
     try {
       await execAsync(downloadCommand, { 
